@@ -11,8 +11,8 @@
 const app = require('express')();
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const { v4: uuidv4 } = require('uuid');
 const { generateKeyPairSync } = require('crypto');
+const api = require('./api/api');
 
 require('dotenv').config();
 
@@ -51,3 +51,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => res.sendFile(__dirname + "/public/index.html"));
+
+app.post("/api/sysAuth", (req, res) => api.sysAuth(req, res));
+app.put("/api/changeProfile", (req, res) => api.changeProfile(req, res));

@@ -1,7 +1,7 @@
-const { sysLogin } = require('./sysLogin');
-const { sysRegister } = require('./sysRegister');
+const { sysAuth } = require('./sysAuth');
+const { changeProfile } = require('./changeProfile');
 
 module.exports = {
-    sysLogin,
-    sysRegister
+    sysAuth,
+    changeProfile
 }
