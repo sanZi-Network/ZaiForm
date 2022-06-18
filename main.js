@@ -19,6 +19,8 @@ require('dotenv').config();
 const PORT = process.env.PORT || 1287;
 
 if (!fs.existsSync("storaged")) fs.mkdirSync("storaged");
+if (!fs.existsSync("storaged/accounts")) fs.mkdirSync("storaged/accounts");
+if (!fs.existsSync("storaged/forms")) fs.mkdirSync("storaged/forms");
 if (!fs.existsSync("storaged/authPrivate.key") || !fs.existsSync("storaged/authPublic.key")) {
     const { privateKey, publicKey } = generateKeyPairSync('rsa', {
         modulusLength: 4096,
