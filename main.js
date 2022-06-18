@@ -55,3 +55,5 @@ app.get("/", (req, res) => res.sendFile(__dirname + "/public/index.html"));
 app.post("/api/sysAuth", (req, res) => api.sysAuth(req, res));
 app.put("/api/changeProfile", (req, res) => api.changeProfile(req, res));
 app.post("/api/createForm", (req, res) => api.createForm(req, res));
+app.get("/api/viewForm/:form", (req, res) => api.viewForm(req, res));
+app.put("/api/editForm", (req, res) => api.viewForm(req, res));
