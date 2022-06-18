@@ -1,0 +1,5 @@
+# Repository: github.com/sanZi-Network/ZaiForm
+
+node_modules/*
+storaged/*
+.env
