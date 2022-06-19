@@ -58,6 +58,17 @@ function toPageTop() {
     window.scrollTo(0, 0);
 }
 
+function setContent(content) {
+    document.querySelector("#mainContent").innerHTML = content;
+}
+
+function setStyle(styleContent) {
+    var style = document.querySelector("#style") || document.createElement("style");
+    style.innerHTML = styleContent;
+    style.id = "pageStyle";
+    document.head.appendChild(style);
+}
+
 function loadScript(url, callback) {
     fetch(url).then(res => res.text()).then(async res => {
         eval(res);
@@ -80,8 +91,8 @@ function loadPage(path, orgPath) {
 
     if (!page.find(e => e.path === location.pathname)) path = "/404";
 
-    var doc = document.querySelector("#mainContent");
-    doc.innerHTML = "";
+    setContent("");
+    setStyle("");
     window.pageData.function = {};
     window.pageData.data = {};
     if (window.pageData.Interval.length > 0) {
