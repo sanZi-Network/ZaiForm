@@ -5,8 +5,23 @@ window.pageData.Interval = [];
 const page = [
     {
         path: "/",
-        name: "首頁",
+        name: "Home",
         id: "home",
+    },
+    {
+        path: "/404",
+        name: "404",
+        id: "404",
+    },
+    {
+        path: "/create",
+        name: "Create",
+        id: "create"
+    },
+    {
+        path: "/login",
+        name: "Login",
+        id: "login"
     }
 ];
 
@@ -63,10 +78,13 @@ function setContent(content) {
 }
 
 function setStyle(styleContent) {
-    var style = document.querySelector("#style") || document.createElement("style");
+    var style = document.querySelector("#pageStyle");
+    if (!style) {
+        style = document.createElement("style");
+        style.id = "pageStyle";
+        document.head.appendChild(style);
+    }
     style.innerHTML = styleContent;
-    style.id = "pageStyle";
-    document.head.appendChild(style);
 }
 
 function loadScript(url, callback) {

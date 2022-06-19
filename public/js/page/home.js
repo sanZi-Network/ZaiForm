@@ -65,19 +65,19 @@ window.execute = async () => {
                         <i class="fas fa-code"></i>
                         <h2>Easy to use</h2>
                         <p>ZaiForm is easy to use, you can create forms in seconds.</p>
-                        <a href="/docs/">Learn more</a>
+                        <a href="/create">Learn more</a>
                     </div>
                     <div class="intro">
                         <i class="fas fa-chart-line"></i>
                         <h2>Analytics</h2>
                         <p>ZaiForm has built-in analytics, you can see how your forms performance.</p>
-                        <a href="/docs/">Learn more</a>
+                        <a href="/create">Learn more</a>
                     </div>
                     <div class="intro">
                         <i class="fas fa-code"></i>
                         <h2>Customizable</h2>
                         <p>ZaiForm is customizable, you can change the style of your forms.</p>
-                        <a href="/docs/">Learn more</a>
+                        <a href="/create">Learn more</a>
                     </div>
                     <div class="intro">
                         <i class="fa-brands fa-github"></i>
@@ -86,6 +86,7 @@ window.execute = async () => {
                         <a href="https://github.com/sanZi-Network/ZaiForm">Check it Out!</a>
                     </div>
                 </div>
+            </div>
         </div>
     `);
 }
