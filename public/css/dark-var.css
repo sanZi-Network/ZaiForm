@@ -1,0 +1,34 @@
+:root {
+    --color-font: #ffffff;
+    --color-bg: #131313;
+    --color-bg-blur: #00000030;
+    --color-header-bg-hover: #252525;
+    --color-header-bg-special: #0077ff;
+    --color-header-text-special: #fff;
+    --color-header-bg-special-hover: #0065d8;
+    --color-header-border: #3d3d3d;
+    --color-a: #3d91ff;
+    --color-pagetitle: #1c78f1;
+    --color-border: #a0a0a0;
+    --color-button-bg: #008fe2;
+    --color-button-text: #fff;
+    --color-button-hover-bg: #0072b4;
+    --color-input-border: #a8a8a8;
+    --color-input-bg: unset;
+    --color-input-text: #ffffff;
+    --color-input-active: #0aa2fa;
+    --color-select-bg: #000000;
+    --color-label: #b9b9b9;
+    --color-task-status-bg: #0b7ec0;
+    --color-task-status-bar: #707070;
+
+    --color-dataContent-bg: #202020;
+    --color-dataContent-title-color: #c4c4c4;
+    --color-dataContent-value-color: #ffffff;
+    --color-dataContent-extra-color: #9e9e9e;
+
+    --color-group-bg: #707070;
+    --color-group-text: #ffffff;
+    --color-footer: #d4d4d4;
+    --color-footer-border: #6b6b6b;
+}

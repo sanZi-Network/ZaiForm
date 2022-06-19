@@ -1,0 +1,81 @@
+header {
+    width: 100%;
+    min-height: 110px;
+    border-bottom: 1px solid var(--color-header-border);
+}
+
+header .md {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    position: relative;
+}
+
+header .md > div:first-child {
+    width: 100%;
+    height: 110px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-bg);
+    z-index: 10;
+}
+
+header a {
+    color: var(--color-font);
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+    width: 80%;
+    text-align: center;
+}
+
+header a:hover {
+    background-color: var(--color-header-bg-hover);
+}
+
+header a.special {
+    background-color: var(--color-header-bg-special);
+    color: var(--color-header-text-special);
+    font-weight: 900;
+}
+
+header a.special:hover {
+    background-color: var(--color-header-bg-special-hover);
+    color: var(--color-header-text-special);
+}
+
+header .md .menu:not(.open) {
+    position: absolute;
+    transform: translateY(-100%);
+}
+
+header .md .menu {
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+header .md .menuBtn {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    display: block;
+    z-index: 10;
+    font-size: 30px;
+    margin-top: -77px;
+    margin-right: 80%;
+    width: 30px;
+}
+
+header .md .menuBtn.open::before {
+    content: "\f0c9";
+}
+
+header .md .menuBtn.close::before {
+    content: "\f00d";
+}

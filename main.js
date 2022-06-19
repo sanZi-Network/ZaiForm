@@ -8,7 +8,8 @@
  * Repository: https://github.com/sanZi-Network/ZaiForm
  */
 
-const app = require('express')();
+const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const { generateKeyPairSync } = require('crypto');
@@ -64,3 +65,7 @@ app.post("/api/createForm", (req, res) => api.createForm(req, res));
 // Method PUT
 app.put("/api/changeProfile", (req, res) => api.changeProfile(req, res));
 app.put("/api/editForm", (req, res) => api.viewForm(req, res));
+
+app.use(express.static(__dirname + "/public"));
+
+app.get("*", (req, res) => res.sendFile(__dirname + "/public/index.html"));

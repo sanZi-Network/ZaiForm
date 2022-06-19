@@ -5,8 +5,48 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>ZaiForm</title>
+        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/css/light-var.css" media="(prefers-color-scheme: light)">
+        <link rel="stylesheet" href="/css/dark-var.css" media="(prefers-color-scheme: dark)">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <script src="/js/main.js"></script>
+        <script src="/js/darkLight.js" defer></script>
     </head>
     <body>
-        <h1>ZaiForm, Hello World!</h1>
+        <header>
+            <div class="md">
+                <div>
+                    <h2>ZaiForm</h2>
+                    <!-- <h5 style="color: #ffa600;font-weight: 200;">Beta</h5> -->
+                </div>
+                <div style="flex: 1 1 auto;"></div>
+                <a class="menuBtn open" onclick="showMenu()" id="menuBtn"></a>
+                <div class="menu">
+                    <a>Login / Sign Up</a>
+                    <a class="special">Create Form</a>
+                    <button type="button" class="theme-icon" data-extra="點擊切換主題">
+                        <i aria-hidden="true" class="fas fa-moon"></i>
+                        <i aria-hidden="true" class="fas fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <section>
+            <div class="md">
+                <span id="pathName"></span>
+                <div class="page">
+                    <div id="mainContent"></div>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div>
+                <span><a href="https://github.com/sanZi-Network/ZaiForm">ZaiForm</a> is an Open-Source project by <a href="https://github.com/sanZi-Network">sanZi Network</a></span>
+                <span>Dev By <a href="https://github.com/000hen">Muisnow (@000hen)</a></span>
+            </div>
+        </footer>
     </body>
 </html>

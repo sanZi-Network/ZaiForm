@@ -1,0 +1,42 @@
+header {
+    width: 100%;
+    height: 110px;
+    font-weight: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header .md {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+header .md .menu {
+    display: contents;
+}
+
+header a {
+    color: var(--color-font);
+    text-decoration: none;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 0 10px;
+}
+
+header a:hover {
+    background-color: var(--color-header-bg-hover);
+}
+
+header a.special {
+    background-color: var(--color-header-bg-special);
+    color: var(--color-header-text-special);
+    font-weight: 900;
+}
+
+header a.special:hover {
+    background-color: var(--color-header-bg-special-hover);
+    color: var(--color-header-text-special);
+}
