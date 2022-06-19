@@ -50,6 +50,7 @@ app.listen(PORT, () => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.enable('trust proxy');
 
 app.get("/", (req, res) => res.sendFile(__dirname + "/public/index.html"));
 
@@ -57,6 +58,7 @@ app.get("/", (req, res) => res.sendFile(__dirname + "/public/index.html"));
 // Method GET
 app.get("/api/getUserInfo", (req, res) => api.getUserInfo(req, res));
 app.get("/api/viewForm/:form", (req, res) => api.viewForm(req, res));
+app.get("/api/sysAuth", (req, res) => api.sysAuth(req, res));
 
 // Method POST
 app.post("/api/sysAuth", (req, res) => api.sysAuth(req, res));

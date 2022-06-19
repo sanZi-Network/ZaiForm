@@ -1,5 +1,39 @@
 window.execute = async () => {
     // Login
+
+    function loginWithSanZi() {
+        return new Promise(async (resolve, reject) => {
+            var authID = await fetch("/api/sysAuth", {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "sanZiLogin"
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(res => res.json()).catch(err => {
+                console.log(err);
+                alertBox("Error: " + err.message, "error");
+            });
+
+            var win = window.open(authID.data.authURI, 'Authentication', config = 'height=800,width=500');
+            // check if window is closed
+            var check = setInterval(() => {
+                if (win.closed) {
+                    clearInterval(check);
+                    var loginDt = localStorage.getItem("auth");
+                    if (!loginDt) {
+                        alertBox("Error: Authentication failed", "error");
+                        return;
+                    }
+                    alertBox("Successfully logged in", "success");
+
+                    resolve();
+                }
+            }, 1000);
+        });
+    }
+
     setStyle(`
         .page {
             margin: 0 auto;
@@ -84,10 +118,21 @@ window.execute = async () => {
                     </form>
                     <div class="separate"><span>OR</span></div>
                     <div class="extra-login">
-                        <a href="/login/google">Login with <img src="/img/sanZi/dark.png" height="24" style="margin: 5px;" /></a>
+                        <a href="#" id="sanZiAuth">Login with <img src="/img/sanZi/dark.png" height="24" style="margin: 5px;" /></a>
                     </div>
                 </div>
             </div>
         </div>
     `);
+
+    document.querySelector("#sanZiAuth").addEventListener("click", async (event) => {
+        var btn = event.target;
+        if (btn.disabled) return;
+        btn.disabled = true;
+        var text = btn.innerHTML;
+        btn.innerHTML = "Authenticating...";
+        await loginWithSanZi();
+        btn.innerHTML = text;
+        btn.disabled = false;
+    });
 }

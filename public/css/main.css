@@ -276,6 +276,11 @@ button:active {
     background-color: var(--color-button-hover-bg);
 }
 
+button:disabled {
+    background-color: var(--color-button-disabled-bg);
+    color: var(--color-button-disabled-text);
+}
+
 .toastBox {
     display: block;
     position: fixed;

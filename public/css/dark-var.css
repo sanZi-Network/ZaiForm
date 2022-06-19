@@ -13,6 +13,8 @@
     --color-button-bg: #008fe2;
     --color-button-text: #fff;
     --color-button-hover-bg: #0072b4;
+    --color-button-disabled-bg: #707070;
+    --color-button-disabled-text: #fff;
     --color-input-border: #a8a8a8;
     --color-input-bg: unset;
     --color-input-text: #ffffff;
