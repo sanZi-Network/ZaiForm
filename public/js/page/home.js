@@ -18,7 +18,7 @@ window.execute = async () => {
             font-size: 1.5rem;
             font-weight: 600;
             color: #fff;
-            background: #00bcd4;
+            background: #005fd4;
             border-radius: 5px;
             padding: 0.5rem 1rem;
             margin-top: 1rem;
@@ -37,7 +37,7 @@ window.execute = async () => {
             font-size: 1.5rem;
             font-weight: 600;
             padding: 30px;
-            background-color: #37474f;
+            background-color: var(--color-card-bg);
             border-radius: 15px;
             margin: 15px;
             flex: 1;
@@ -47,9 +47,17 @@ window.execute = async () => {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
+            color: var(--color-card-text);
         }
-        .home .features .feature .intro h1 {
-            margin-bottom: 15px;
+        .home .features .feature .intro h2 {
+            margin-bottom: 30px;
+            color: var(--color-card-text);
+        }
+        .home .features .feature .intro i {
+            color: var(--color-card-text);
+        }
+        .home .features .feature .intro a {
+            color: var(--color-card-a);
         }
     `);
     setContent(`
@@ -74,7 +82,7 @@ window.execute = async () => {
                         <a href="/create">Learn more</a>
                     </div>
                     <div class="intro">
-                        <i class="fas fa-code"></i>
+                        <i class="fa-solid fa-paint-roller"></i>
                         <h2>Customizable</h2>
                         <p>ZaiForm is customizable, you can change the style of your forms.</p>
                         <a href="/create">Learn more</a>
