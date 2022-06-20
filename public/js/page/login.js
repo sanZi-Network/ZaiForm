@@ -1,6 +1,11 @@
 window.execute = async () => {
     // Login
 
+    function loginSuccess() {
+        window.userInfo = new User(localStorage.getItem("auth"));
+        goPage("/dashboard");
+    }
+
     function loginWithSanZi() {
         return new Promise(async (resolve, reject) => {
             var authID = await fetch("/api/sysAuth", {
@@ -32,7 +37,7 @@ window.execute = async () => {
                         return;
                     }
                     alertBox("Successfully logged in", "success");
-                    goPage("/dashboard");
+                    loginSuccess();
                     resolve();
                 }
             }, 1000);
@@ -168,7 +173,6 @@ window.execute = async () => {
 
         alertBox("Successfully logged in", "success");
         localStorage.setItem("auth", res.data.token);
-        window.userInfo = new User(res.data.token);
-        goPage("/dashboard");
+        loginSuccess();
     });
 }

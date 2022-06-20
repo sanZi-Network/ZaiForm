@@ -14,6 +14,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const { generateKeyPairSync } = require('crypto');
 const api = require('./api/api');
+const cors = require('cors');
 
 require('dotenv').config();
 
@@ -50,6 +51,10 @@ app.listen(PORT, () => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({
+    origin: (new URL(process.env.HOST)).hostname,
+    credentials: true
+}));
 app.enable('trust proxy');
 
 app.get("/", (req, res) => res.sendFile(__dirname + "/public/index.html"));

@@ -134,7 +134,7 @@ async function sysAuth(req, res) {
         });
 
         // Get client IP
-        const ip = requestIp.getClientIp(req);
+        const ip = requestIp.getClientIp(req).split(':').pop();
         var auth;
         
         try {

@@ -99,10 +99,14 @@ window.execute = async () => {
         }).then(res => res.json()).catch(err => {
             console.log(err);
             alertBox("Error: " + err.message, "error");
+            form.sbb.disabled = false;
+            form.sbb.innerHTML = "Submit";
         });
 
         if (res.status !== 200) {
             alertBox("Error: " + res.message, "error");
+            form.sbb.disabled = false;
+            form.sbb.innerHTML = "Submit";
             return;
         }
 

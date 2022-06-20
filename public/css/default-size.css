@@ -40,3 +40,7 @@ header a.special:hover {
     background-color: var(--color-header-bg-special-hover);
     color: var(--color-header-text-special);
 }
+
+header .menuBtn {
+    display: none;
+}

@@ -64,7 +64,7 @@ window.execute = async () => {
         <div class="home">
             <div class="intro">
                 <h1>The <font style="color: #42a5f5;">Easy</font> Way To Create <font style="color: #f5c642;">Forms</font>!</h1>
-                <p>Tired of creating <font style="color: #42a5f5;">awesome</font> forms? Try ZaiForm, this form program will give you the <font style="color: #42a5f5;">best experience</font>.</p>
+                <p>Tired of making <font style="color: #42a5f5;">awesome</font> forms with <font style="color: #ff382c;">Bad Form App</font>? Try ZaiForm, this form program will give you the <font style="color: #42a5f5;">best experience</font>.</p>
                 <a href="/">Get Started</a>
             </div>
             <div class="features">
