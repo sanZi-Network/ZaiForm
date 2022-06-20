@@ -10,7 +10,7 @@ This is a form system, which is a simple way to create the form system by your o
 ## Configure
 ZaiForm has lots of configuration options. You need to set up a `.env` file in the root directory of your project.
 
-Option             | Description             | Default              | Allowable Values       | Required
+Option             | Description             | Default              | Available Values       | Required
 ------------------ | ----------------------- | -------------------- | ---------------------- | --------------
 `PORT`             | Server Port             | `1287`               | `[1-65535]`            | No
 `SANZIAUTH_APPID`  | SanZi Auth App ID       | Empty                | `[sanZi Auth App ID]`  | No
@@ -21,4 +21,4 @@ Option             | Description             | Default              | Allowable 
 `SMTP_USER`        | SMTP User               | Empty                | `[smtp user]`          | Required if `SMTP_TYPE` is not empty
 `SMTP_PASS`        | SMTP Password           | Empty                | `[smtp password]`      | Required if `SMTP_TYPE` is not empty
 `SMTP_FROM`        | SMTP From               | Empty                | `[smtp from]`          | Required if `SMTP_TYPE` is not empty
-`SMTP_SECURE`      | SMTP Using Secure       | Empty                | `[tls, ssl]`           | Required if `SMTP_TYPE` is `smtp`
+`SMTP_SECURE`      | SMTP Using Secure       | Empty                | `[true, false]`        | Required if `SMTP_TYPE` is `smtp`

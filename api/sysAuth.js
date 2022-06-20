@@ -2,7 +2,7 @@ async function sysAuth(req, res) {
     const { action } = req.body;
     const crypto = require('crypto');
     const requestIp = require('request-ip');
-    const { createAccount, loginAccount, createSanZiAuthToken, getSanZiUserInfo, checkSanZiAvailable, readAccountDB } = require('../lib/lib');
+    const { createAccount, loginAccount, readAccountFile, createSanZiAuthToken, getSanZiUserInfo, checkSanZiAvailable, readAccountDB, readTemplate, replaceHTML, sendMail, updateAccountProfile, jwtEncode, jwtDecode } = require('../lib/lib');
 
     function validateEmail(email) {
         // https://stackoverflow.com/a/46181
@@ -44,7 +44,7 @@ async function sysAuth(req, res) {
         if (!account) {
             account = createAccount(UserName, crypto.randomBytes(16).toString('hex'), UserEmail, `SanZi-${UserUID}`);
         } else {
-            account = loginAccount(UserName, crypto.randomBytes(16).toString('hex'), "social");
+            account = loginAccount(UserName, account.pass, "social");
         }
 
         if (!account) return res.status(400).json({
@@ -135,6 +135,95 @@ async function sysAuth(req, res) {
                 authID: auth.authTkn,
                 authURI: auth.authURI
             }
+        });
+    }
+
+    if (action === "resetPassword") {
+        const accountDB = readAccountDB();
+        const { email } = req.body;
+
+        if (!email) return res.status(400).json({
+            message: 'Missing email',
+            status: 400
+        });
+
+        if (!validateEmail(email)) return res.status(400).json({
+            message: 'Invalid email',
+            status: 400
+        });
+
+        const account = accountDB.find(account => account.email === email);
+        if (!account) return res.status(400).json({
+            message: "The account does not exist",
+            status: 400
+        });
+
+        const accountData = readAccountFile(account.id);
+        const key = crypto.createHash('sha256').update(accountData.key).digest('hex');
+
+        const token = Buffer.from(jwtEncode({
+            id: account.id,
+            key: key
+        }, "1h")).toString('base64');
+
+        const template = readTemplate("resetPassword");
+        const html = replaceHTML(template, {
+            url: `${process.env.HOST}${process.env.PORT == 80 ? "" : process.env.PORT == 443 ? "" : `:${process.env.PORT}`}/resetPassword?token=${token}`
+        });
+
+        sendMail(email, "[ZaiForm] Reset Password", html);
+
+        return res.status(200).json({
+            message: "The reset password email has been sent",
+            status: 200
+        });
+    }
+
+    if (action === "newPassword") {
+        const { token, password } = req.body;
+
+        if (!token || !password) return res.status(400).json({
+            message: 'Missing token or password',
+            status: 400
+        });
+
+        const accountData = Buffer.from(token, 'base64').toString('utf8');
+        var account;
+        try {
+            account = jwtDecode(accountData);
+        } catch (error) {
+            return res.status(400).json({
+                message: "Invalid token",
+                status: 400
+            });
+        }
+
+        if (!account) return res.status(400).json({
+            message: "Invalid token",
+            status: 400
+        });
+
+        const accountFile = readAccountFile(account.id);
+        if (!accountFile) return res.status(400).json({
+            message: "Invalid token",
+            status: 400
+        });
+
+        const key = crypto.createHash('sha256').update(accountFile.key).digest('hex');
+        if (key !== account.key) return res.status(400).json({
+            message: "Invalid token",
+            status: 400
+        });
+
+        var t = updateAccountProfile(account.id, accountFile.name, accountFile.email, password);
+        if (!t) return res.status(500).json({
+            message: "Internal server error",
+            status: 500
+        });
+
+        return res.status(200).json({
+            message: "The password has been changed",
+            status: 200
         });
     }
 
