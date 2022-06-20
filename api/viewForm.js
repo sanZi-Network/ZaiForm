@@ -3,20 +3,20 @@ function viewForm(req, res) {
     const fromID = req.params.form;
     var userID;
     if (!fromID) return res.status(400).json({
-        error: 'Missing form ID',
+        message: 'Missing form ID',
         status: 400
     });
 
     if (req.headers.authorization) {
         const auth = parserAuthorizationHeader(req.headers.authorization);
         if (!auth) return res.status(401).json({
-            error: 'Invalid authorization header',
+            message: 'Invalid authorization header',
             status: 401
         });
 
         const account = verifyAccount(auth);
         if (!account) return res.status(401).json({
-            error: 'Invalid authorization header',
+            message: 'Invalid authorization header',
             status: 401
         });
 
@@ -27,7 +27,7 @@ function viewForm(req, res) {
     const formDBData = formDB.find(form => form.id === fromID);
     const formData = readFormFile(fromID, formDBData.author);
     if (!formDBData) return res.status(404).json({
-        error: 'Form not found',
+        message: 'Form not found',
         status: 404
     });
 

@@ -2,31 +2,31 @@ function editForm(req, res) {
     const { verifyAccount, parserAuthorizationHeader, updateForm, updateFormField } = require('../lib/lib');
     // check auth
     if (!req.headers.authorization) return res.status(401).json({
-        error: 'Missing authorization header',
+        message: 'Missing authorization header',
         status: 401
     });
 
     const auth = parserAuthorizationHeader(req.headers.authorization);
     if (!auth) return res.status(401).json({
-        error: 'Invalid authorization header',
+        message: 'Invalid authorization header',
         status: 401
     });
 
     const account = verifyAccount(auth);
     if (!account) return res.status(401).json({
-        error: 'Invalid authorization header',
+        message: 'Invalid authorization header',
         status: 401
     });
 
     // check body
     const { id, title, fields } = req.body;
     if (!id) return res.status(400).json({
-        error: 'Missing id',
+        message: 'Missing id',
         status: 400
     });
 
     if (!title || !fields) return res.status(400).json({
-        error: 'Missing title or fields',
+        message: 'Missing title or fields',
         status: 400
     });
 

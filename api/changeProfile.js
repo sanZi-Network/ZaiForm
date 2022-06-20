@@ -2,19 +2,19 @@ function changeProfile(req, res) {
     const { verifyAccount, parserAuthorizationHeader, updateAccountProfile } = require('../lib/lib');
     // check auth
     if (!req.headers.authorization) return res.status(401).json({
-        error: 'Missing authorization header',
+        message: 'Missing authorization header',
         status: 401
     });
 
     const auth = parserAuthorizationHeader(req.headers.authorization);
     if (!auth) return res.status(401).json({
-        error: 'Invalid authorization header',
+        message: 'Invalid authorization header',
         status: 401
     });
 
     const account = verifyAccount(auth);
     if (!account) return res.status(401).json({
-        error: 'Invalid authorization header',
+        message: 'Invalid authorization header',
         status: 401
     });
 

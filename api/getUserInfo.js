@@ -2,25 +2,25 @@ function getUserInfo(req, res) {
     const { verifyAccount, parserAuthorizationHeader, readAccountFile, getForms } = require('../lib/lib');
     // check auth
     if (!req.headers.authorization) return res.status(401).json({
-        error: 'Missing authorization header',
+        message: 'Missing authorization header',
         status: 401
     });
 
     const auth = parserAuthorizationHeader(req.headers.authorization);
     if (!auth) return res.status(401).json({
-        error: 'Invalid authorization header',
+        message: 'Invalid authorization header',
         status: 401
     });
 
     const account = verifyAccount(auth);
     if (!account) return res.status(401).json({
-        error: 'Invalid authorization header',
+        message: 'Invalid authorization header',
         status: 401
     });
 
     const accountFile = readAccountFile(account.id);
     if (!accountFile) return res.status(400).json({
-        error: 'Invalid account',
+        message: 'Invalid account',
         status: 400
     });
 

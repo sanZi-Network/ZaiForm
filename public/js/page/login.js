@@ -16,6 +16,11 @@ window.execute = async () => {
                 alertBox("Error: " + err.message, "error");
             });
 
+            if (authID.status !== 200) {
+                alertBox("Error: " + authID.message, "error");
+                return resolve();
+            }
+
             var win = window.open(authID.data.authURI, 'Authentication', config = 'height=800,width=500');
             // check if window is closed
             var check = setInterval(() => {
@@ -112,7 +117,7 @@ window.execute = async () => {
                             <button type="submit">Login</button>
                         </div>
                         <div class="extra">
-                            <span><a href="/register">Register</a></span>
+                            <span><a>Register</a></span>
                             <span><a href="/forgot-password">Forgot Password</a></span>
                         </div>
                     </form>

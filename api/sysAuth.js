@@ -13,7 +13,7 @@ async function sysAuth(req, res) {
 
     if (req.query.authType === "sanZi") {
         if (!checkSanZiAvailable()) return res.status(400).json({
-            error: 'SanZi Auth is not available',
+            message: 'SanZi Auth is not available',
             status: 400
         });
 
@@ -30,7 +30,7 @@ async function sysAuth(req, res) {
         }
 
         if (!sanZiUserInfo) return res.status(400).json({
-            error: 'Invalid SanZi Auth token',
+            message: 'Invalid SanZi Auth token',
             status: 400
         });
 
@@ -48,7 +48,7 @@ async function sysAuth(req, res) {
         }
 
         if (!account) return res.status(400).json({
-            error: 'The account has been created, you need to login with your account',
+            message: 'The account has been created, you need to login with your account',
             status: 400
         });
 
@@ -60,12 +60,12 @@ async function sysAuth(req, res) {
         const { username, password, email } = req.body;
 
         if (!username || !password || !email) return res.status(400).json({
-            error: 'Missing username, password or email',
+            message: 'Missing username, password or email',
             status: 400
         });
 
         if (!validateEmail(email)) return res.status(400).json({
-            error: 'Invalid email',
+            message: 'Invalid email',
             status: 400
         });
 
@@ -89,7 +89,7 @@ async function sysAuth(req, res) {
         const { username, password } = req.body;
 
         if (!username || !password) return res.status(400).json({
-            error: 'Missing username or password',
+            message: 'Missing username or password',
             status: 400
         });
 
@@ -111,7 +111,7 @@ async function sysAuth(req, res) {
 
     if (action === "sanZiLogin") {
         if (!checkSanZiAvailable()) return res.status(400).json({
-            error: 'SanZi Auth is not available',
+            message: 'SanZi Auth is not available',
             status: 400
         });
 
@@ -139,7 +139,7 @@ async function sysAuth(req, res) {
     }
 
     return res.status(400).json({
-        error: 'Invalid action',
+        message: 'Invalid action',
         status: 400
     });
 }
