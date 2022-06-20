@@ -104,7 +104,7 @@ window.execute = async () => {
                     <h1>Login to ZaiForm</h1>
                 </div>
                 <div class="login-body">
-                    <form action="/login" method="post" id="lgb">
+                    <form action="#" method="post" id="lgb">
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" id="username" name="username">
@@ -118,7 +118,7 @@ window.execute = async () => {
                         </div>
                         <div class="extra">
                             <span><a>Register</a></span>
-                            <span><a href="/forgot-password">Forgot Password</a></span>
+                            <span><a href="/forgetPassword">Forgot Password</a></span>
                         </div>
                     </form>
                     <div class="separate"><span>OR</span></div>
@@ -167,7 +167,8 @@ window.execute = async () => {
         }
 
         alertBox("Successfully logged in", "success");
-        localStorage.setItem("auth", JSON.stringify(res.data));
+        localStorage.setItem("auth", res.data.token);
+        window.userInfo = new User(res.data.token);
         goPage("/dashboard");
     });
 }

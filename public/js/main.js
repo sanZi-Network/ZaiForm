@@ -22,6 +22,16 @@ const page = [
         path: "/login",
         name: "Login",
         id: "login"
+    },
+    {
+        path: "/forgetPassword",
+        name: "Forget Password",
+        id: "forgetPassword"
+    },
+    {
+        path: "/resetPassword",
+        name: "Reset Password",
+        id: "resetPassword"
     }
 ];
 
@@ -87,10 +97,11 @@ function setStyle(styleContent) {
     style.innerHTML = styleContent;
 }
 
-function loadScript(url, callback) {
-    fetch(url).then(res => res.text()).then(async res => {
-        eval(res);
-        if (typeof callback === "function") callback(window.pageData.function.execute());
+async function loadScript(url) {
+    return new Promise((resolve, reject) => {
+        fetch(url).then(res => res.text()).then(async res => {
+            resolve(eval(res));
+        });
     });
 }
 
@@ -137,7 +148,8 @@ document.addEventListener("click", event => {
     if (ele) {
         event.preventDefault();
         var url = ele.href; 
-        if (url === undefined || url === "" || url === null || url === location.href + "#" || url === location.href) return;
+        if (url === undefined || url === "" || url === null || url === location.href + "#" || url === location.href || url === "#") return;
+        console.log(url);
         var urlObject = new URL(url);
         if (urlObject.host === window.location.host) {
             goPage(urlObject.pathname + urlObject.search);
@@ -147,12 +159,24 @@ document.addEventListener("click", event => {
     }
 });
 
-window.onload = () => {
+window.onload = async () => {
     loadPage(location.pathname);
     localStorage.getItem("theme") ? window.updateThemeMode(localStorage.getItem("theme")) : (window.matchMedia('(prefers-color-scheme: dark)').matches ? window.updateThemeMode("dark") : window.updateThemeMode("light"));
     document.querySelector(".theme-icon").addEventListener("click", () => {
         toggleLocalStorageItem();
     });
+
+    await loadScript("/js/lib/user.class.js");
+    if (localStorage.getItem("auth")) {
+        window.userInfo = new User(localStorage.getItem("auth"));
+        var t = setInterval(() => {
+            if (window.userInfo._initlized) clearInterval(t);
+            if (window.userInfo._isFailedLogin) {
+                localStorage.removeItem("auth");
+                clearInterval(t);
+            }
+        }, 100);
+    }
 }
 
 window.onpopstate = (event) => {

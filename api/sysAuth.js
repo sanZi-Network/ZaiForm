@@ -40,7 +40,7 @@ async function sysAuth(req, res) {
             UserEmail
         } = sanZiUserInfo.data.userData;
         const accountDB = readAccountDB();
-        var account = accountDB.find(account => account.sanZiID === `SanZi-${UserUID}`);
+        var account = accountDB.find(account => account.id === `SanZi-${UserUID}`);
         if (!account) {
             account = createAccount(UserName, crypto.randomBytes(16).toString('hex'), UserEmail, `SanZi-${UserUID}`);
         } else {
@@ -239,10 +239,7 @@ async function sysAuth(req, res) {
             status: 500
         });
 
-        return res.status(200).json({
-            message: "The password has been changed",
-            status: 200
-        });
+        return res.status(204)
     }
 
     return res.status(400).json({
