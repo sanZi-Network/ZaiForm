@@ -2,7 +2,7 @@ async function sysAuth(req, res) {
     const { action } = req.body;
     const crypto = require('crypto');
     const requestIp = require('request-ip');
-    const { createAccount, loginAccount, readAccountFile, createSanZiAuthToken, getSanZiUserInfo, checkSanZiAvailable, readAccountDB, readTemplate, replaceHTML, sendMail, updateAccountProfile, jwtEncode, jwtDecode } = require('../lib/lib');
+    const { createAccount, loginAccount, readAccountFile, createSanZiAuthToken, getSanZiUserInfo, checkSanZiAvailable, readAccountDB, readTemplate, replaceHTML, sendMail, updateAccountProfile, jwtEncode, jwtDecode, emailVerify } = require('../lib/lib');
 
     function validateEmail(email) {
         // https://stackoverflow.com/a/46181
@@ -54,6 +54,24 @@ async function sysAuth(req, res) {
 
         // Return a html page with the token
         return res.status(200).set('Content-Type', 'text/html').send(Buffer.from(`<html><body><script>localStorage.setItem("auth", "${account.token}");self.close();</script></body></html>`));
+    }
+
+    if (req.query.authType === "mailVerify") {
+        const { token } = req.query;
+        if (!token) return res.status(400).json({
+            message: 'Invalid token',
+            status: 400
+        });
+
+        const verify = emailVerify(token);
+
+        if (!verify) return res.status(400).json({
+            message: 'Invalid token',
+            status: 400
+        });
+
+        // Redirect to login page
+        return res.status(302).redirect(`${process.env.HOST}/login`);
     }
 
     if (action === "register") {
@@ -168,7 +186,7 @@ async function sysAuth(req, res) {
 
         const template = readTemplate("resetPassword");
         const html = replaceHTML(template, {
-            url: `${process.env.HOST}${process.env.PORT == 80 ? "" : process.env.PORT == 443 ? "" : `:${process.env.PORT}`}/resetPassword?token=${token}`
+            url: `${process.env.HOST}/resetPassword?token=${token}`
         });
 
         sendMail(email, "[ZaiForm] Reset Password", html);
@@ -215,7 +233,7 @@ async function sysAuth(req, res) {
             status: 400
         });
 
-        var t = updateAccountProfile(account.id, accountFile.name, accountFile.email, password);
+        var t = updateAccountProfile(account.id, null, null, password);
         if (!t) return res.status(500).json({
             message: "Internal server error",
             status: 500

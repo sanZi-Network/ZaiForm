@@ -32,7 +32,7 @@ window.execute = async () => {
                         return;
                     }
                     alertBox("Successfully logged in", "success");
-
+                    goPage("/dashboard");
                     resolve();
                 }
             }, 1000);
@@ -104,7 +104,7 @@ window.execute = async () => {
                     <h1>Login to ZaiForm</h1>
                 </div>
                 <div class="login-body">
-                    <form action="/login" method="post">
+                    <form action="/login" method="post" id="lgb">
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" id="username" name="username">
@@ -131,7 +131,8 @@ window.execute = async () => {
     `);
 
     document.querySelector("#sanZiAuth").addEventListener("click", async (event) => {
-        var btn = event.target;
+        var btn = document.querySelector("#sanZiAuth");
+        if (btn.disabled === undefined) btn.disabled = null; 
         if (btn.disabled) return;
         btn.disabled = true;
         var text = btn.innerHTML;
@@ -139,5 +140,34 @@ window.execute = async () => {
         await loginWithSanZi();
         btn.innerHTML = text;
         btn.disabled = false;
+    });
+
+    document.querySelector("#lgb").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        var form = event.target;
+        var data = {
+            username: form.username.value,
+            password: form.password.value,
+            action: "login"
+        };
+        var res = await fetch("/api/sysAuth", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).catch(err => {
+            console.log(err);
+            alertBox("Error: " + err.message, "error");
+        });
+
+        if (res.status !== 200) {
+            alertBox("Error: " + res.message, "error");
+            return;
+        }
+
+        alertBox("Successfully logged in", "success");
+        localStorage.setItem("auth", JSON.stringify(res.data));
+        goPage("/dashboard");
     });
 }

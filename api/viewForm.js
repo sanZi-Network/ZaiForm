@@ -25,11 +25,12 @@ function viewForm(req, res) {
 
     const formDB = readFormDB();
     const formDBData = formDB.find(form => form.id === fromID);
-    const formData = readFormFile(fromID, formDBData.author);
     if (!formDBData) return res.status(404).json({
         message: 'Form not found',
         status: 404
     });
+
+    const formData = readFormFile(fromID, formDBData.author);
 
     if (formDBData.author !== userID) {
         formData.fields.map(option => {

@@ -13,6 +13,7 @@ ZaiForm has lots of configuration options. You need to set up a `.env` file in t
 Option             | Description             | Default              | Available Values       | Required
 ------------------ | ----------------------- | -------------------- | ---------------------- | --------------
 `PORT`             | Server Port             | `1287`               | `[1-65535]`            | No
+`HOST`             | Server Host             | Empty                | `[Host]`               | Required
 `SANZIAUTH_APPID`  | SanZi Auth App ID       | Empty                | `[sanZi Auth App ID]`  | No
 `SANZIAUTH_APPKEY` | SanZi Auth Secret       | Empty                | `[sanZi Auth Key]`     | No
 `SMTP_TYPE`        | SMTP Type               | Empty                | `[smtp, gmail]`        | No
