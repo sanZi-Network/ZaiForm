@@ -1,11 +1,14 @@
 class User {
+    #_AUTH_KEY;
+
     constructor(authKey) {
         this.id = null;
         this.name = null;
         this.email = null;
+        this.forms = null;
 
         this._initlized = false;
-        this._authKey = authKey;
+        this.#_AUTH_KEY = authKey;
         this._isFailedLogin = false;
         
         this.init();
@@ -24,7 +27,7 @@ class User {
         const userInfo = await fetch(`/api/getUserInfo`, {
             method: 'GET',
             headers: {
-                'Authorization': "Bearer " + this._authKey
+                'Authorization': "Bearer " + this.#_AUTH_KEY
             }
         }).then(res => res.json()).then(res => {
             if (res.status !== 200) return null;
@@ -39,7 +42,8 @@ class User {
         this.id = userInfo.id;
         this.name = userInfo.name;
         this.email = userInfo.email;
-
+        this.forms = userInfo.forms;
+        
         this._initlized = true;
 
         this.setContent();

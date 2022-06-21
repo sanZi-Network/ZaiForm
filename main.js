@@ -55,6 +55,12 @@ app.use(cors({
     origin: (new URL(process.env.HOST)).hostname,
     credentials: true
 }));
+app.use((req, res, next) => {
+    if (req.protocol + '://' + req.get('host') !== process.env.HOST) {
+        res.redirect(`${process.env.HOST}${req.url}`);
+    }
+    next();
+});
 app.enable('trust proxy');
 
 app.get("/", (req, res) => res.sendFile(__dirname + "/public/index.html"));

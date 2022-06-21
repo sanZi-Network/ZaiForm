@@ -32,6 +32,11 @@ const page = [
         path: "/resetPassword",
         name: "Reset Password",
         id: "resetPassword"
+    },
+    {
+        path: "/dashboard",
+        name: "Dashboard",
+        id: "dashboard"
     }
 ];
 
@@ -122,6 +127,7 @@ function loadPage(path, orgPath) {
 
     setContent("");
     setStyle("");
+    hideMenu();
     window.pageData.function = {};
     window.pageData.data = {};
     if (window.pageData.Interval.length > 0) {
@@ -149,7 +155,6 @@ document.addEventListener("click", event => {
         event.preventDefault();
         var url = ele.href; 
         if (url === undefined || url === "" || url === null || url === location.href + "#" || url === location.href || url === "#") return;
-        console.log(url);
         var urlObject = new URL(url);
         if (urlObject.host === window.location.host) {
             goPage(urlObject.pathname + urlObject.search);
@@ -160,12 +165,6 @@ document.addEventListener("click", event => {
 });
 
 window.onload = async () => {
-    loadPage(location.pathname);
-    localStorage.getItem("theme") ? window.updateThemeMode(localStorage.getItem("theme")) : (window.matchMedia('(prefers-color-scheme: dark)').matches ? window.updateThemeMode("dark") : window.updateThemeMode("light"));
-    document.querySelector(".theme-icon").addEventListener("click", () => {
-        toggleLocalStorageItem();
-    });
-
     await loadScript("/js/lib/user.class.js");
     if (localStorage.getItem("auth")) {
         window.userInfo = new User(localStorage.getItem("auth"));
@@ -177,6 +176,12 @@ window.onload = async () => {
             }
         }, 100);
     }
+    
+    loadPage(location.pathname);
+    localStorage.getItem("theme") ? window.updateThemeMode(localStorage.getItem("theme")) : (window.matchMedia('(prefers-color-scheme: dark)').matches ? window.updateThemeMode("dark") : window.updateThemeMode("light"));
+    document.querySelector(".theme-icon").addEventListener("click", () => {
+        toggleLocalStorageItem();
+    });
 }
 
 window.onpopstate = (event) => {
@@ -212,6 +217,14 @@ function showMenu() {
         menuBtn.classList.remove("open");
         menuBtn.classList.add("close");
     }
+}
+
+function hideMenu() {
+    var menu = document.querySelector(".menu");
+    var menuBtn = document.querySelector("#menuBtn");
+    menu.classList.remove("open");
+    menuBtn.classList.add("open");
+    menuBtn.classList.remove("close");
 }
 
 document.addEventListener("DOMNodeInserted", (ev) => {

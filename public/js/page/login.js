@@ -34,6 +34,7 @@ window.execute = async () => {
                     var loginDt = localStorage.getItem("auth");
                     if (!loginDt) {
                         alertBox("Error: Authentication failed", "error");
+                        resolve();
                         return;
                     }
                     alertBox("Successfully logged in", "success");
@@ -136,6 +137,7 @@ window.execute = async () => {
     `);
 
     document.querySelector("#sanZiAuth").addEventListener("click", async (event) => {
+        event.preventDefault();
         var btn = document.querySelector("#sanZiAuth");
         if (btn.disabled === undefined) btn.disabled = null; 
         if (btn.disabled) return;

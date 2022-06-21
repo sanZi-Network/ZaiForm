@@ -112,7 +112,15 @@ window.execute = async () => {
             headers: {
                 "Content-Type": "application/json"
             }
-        }).then(res => res.json()).catch(err => {
+        }).then(async res => {
+            if (res.status === 204) {
+                alertBox("Password changed", "success")
+                return {
+                    status: 200
+                };
+            };
+            return res.json();
+        }).catch(err => {
             console.log(err);
             alertBox("Error: " + err.message, "error");
         });
@@ -121,9 +129,6 @@ window.execute = async () => {
             alertBox("Error: " + res.message, "error");
             return;
         }
-
-        alertBox("Success: " + res.message, "success");
-        form.sbb.innerHTML = "Sent";
 
         goPage("/login");
     });

@@ -12,10 +12,7 @@ async function sysAuth(req, res) {
     };
 
     if (req.query.authType === "sanZi") {
-        if (!checkSanZiAvailable()) return res.status(400).json({
-            message: 'SanZi Auth is not available',
-            status: 400
-        });
+        if (!checkSanZiAvailable()) return res.status(400).set('Content-Type', 'text/html').send(Buffer.from(`<html><body><script>self.close();</script></body></html>`));
 
         const { key } = req.query;
         var sanZiUserInfo;
@@ -23,16 +20,10 @@ async function sysAuth(req, res) {
         try {
             sanZiUserInfo = await getSanZiUserInfo(key);
         } catch (error) {
-            return res.status(400).json({
-                message: "Invalid SanZi Auth token or server might not available for SanZi Auth",
-                status: 400
-            });
+            return res.status(400).set('Content-Type', 'text/html').send(Buffer.from(`<html><body><script>self.close();</script></body></html>`));
         }
 
-        if (!sanZiUserInfo) return res.status(400).json({
-            message: 'Invalid SanZi Auth token',
-            status: 400
-        });
+        if (!sanZiUserInfo) return res.status(400).set('Content-Type', 'text/html').send(Buffer.from(`<html><body><script>self.close();</script></body></html>`));
 
         const {
             UserName,
@@ -47,10 +38,7 @@ async function sysAuth(req, res) {
             account = loginAccount(UserName, account.pass, "social");
         }
 
-        if (!account) return res.status(400).json({
-            message: 'The account has been created, you need to login with your account',
-            status: 400
-        });
+        if (!account) return res.status(400).set('Content-Type', 'text/html').send(Buffer.from(`<html><body><script>self.close();</script></body></html>`));
 
         // Return a html page with the token
         return res.status(200).set('Content-Type', 'text/html').send(Buffer.from(`<html><body><script>localStorage.setItem("auth", "${account.token}");self.close();</script></body></html>`));
@@ -58,17 +46,11 @@ async function sysAuth(req, res) {
 
     if (req.query.authType === "mailVerify") {
         const { token } = req.query;
-        if (!token) return res.status(400).json({
-            message: 'Invalid token',
-            status: 400
-        });
+        if (!token) return res.status(400).send("Invalid token");
 
         const verify = emailVerify(token);
 
-        if (!verify) return res.status(400).json({
-            message: 'Invalid token',
-            status: 400
-        });
+        if (!verify) return res.status(302).redirect(`${process.env.HOST}/login`);
 
         // Redirect to login page
         return res.status(302).redirect(`${process.env.HOST}/login`);
@@ -239,7 +221,7 @@ async function sysAuth(req, res) {
             status: 500
         });
 
-        return res.status(204)
+        return res.status(204).end();
     }
 
     return res.status(400).json({
