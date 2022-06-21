@@ -1,9 +1,48 @@
 window.execute = async () => {
-    if (!window.userInfo) goPage("/login");
+    if (!window.userInfo) {
+        goPage("/login?redirect=" + location.pathname);
+        return;
+    };
 
     const userName = window.userInfo.name;
     const userEmail = window.userInfo.email;
     const userID = window.userInfo.id;
+    const forms = window.userInfo.forms;
+
+    function timestampFormat(timestamp) {
+        var date = new Date(timestamp);
+        return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}:${String(date.getSeconds()).padStart(2, "0")}`;
+    }
+
+    var formList = "";
+
+    if (forms.length === 0) {
+        formList = "<div class='formList'>You have no forms.</div>";
+    } else {
+        formList = "<div class='formList'>";
+        forms.forEach(e => {
+            formList += `
+                <div class="formBox">
+                    <div class="formHeader">
+                        <h1>${e.title}</h1>
+                        <div class="formTimeInfo">
+                            <h3>Created:</h3>
+                            <p>${timestampFormat(e.createAt)}</p>
+                        </div>
+                        <span class="formID">${e.id}</span>
+                    </div>
+                    <div style="flex: 1;"></div>
+                    <div class="buttons">
+                        <a data-extra="Open"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <a data-extra="Edit"><i class="fas fa-edit"></i></a>
+                        <a data-extra="Analyze"><i class="fas fa-chart-line"></i></a>
+                        <a data-extra="Delete"><i class="fas fa-trash-alt"></i></a>
+                    </div>
+                </div>
+            `;
+        });
+        formList += "</div>";
+    }
 
     setStyle(`
         section {
@@ -62,6 +101,77 @@ window.execute = async () => {
         .dashBox .dashBoxBody div {
             color: var(--color-card-text) !important;
         }
+        .formBox {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            background-color: #000;
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+        }
+        .formBox .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .formBox:hover {
+            background-color: #3e67ff;
+            box-shadow: 0px 5px 10px 3px #000;
+        }
+        .formBox .formHeader {
+            max-width: 100%;
+        }
+        .formBox .formHeader h1 {
+            margin-left: 15px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .formBox .formHeader .formTimeInfo h3 {
+            margin-left: 10px;
+            margin-top: 5px;
+            color: var(--color-card-text);
+        }
+        .formBox .formHeader .formTimeInfo p {
+            margin-left: 30px;
+            margin-top: 5px;
+        }
+        .formBox .formHeader span {
+            font-size: .5rem;
+            color: #ffffff40;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            margin-left: 5px;
+            font-family: monospace;
+        }
+        .formBox .formHeader .formID {
+            position: absolute;
+            bottom: 0;
+        }
+        .formBox a i {
+            font-size: 2rem;
+            padding: 15px;
+            color: var(--color-card-text);
+        }
+        .formBox a {
+            border-radius: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            margin-right: 5px;
+        }
+        .formBox a:hover {
+            background: #0031b9;
+        }
+        .formBox a:active {
+            background: #0031b9;
+        }
     `);
     setContent(`
         <div class="home">
@@ -94,15 +204,9 @@ window.execute = async () => {
                         <h2>Your Forms</h2>
                     </div>
                     <div class="dashBoxBody">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.Nunc faucibus est tortor, a tincidunt velit sodales condimentum.In luctus lacus dictum diam auctor porta.Donec accumsan lacinia mauris, sit amet tincidunt ex tempor et.Aenean hendrerit, est ut fringilla convallis, tellus orci sodales massa, ornare semper justo massa quis turpis.Sed consectetur odio non nisi imperdiet vestibulum.Fusce sed tortor dignissim, ullamcorper lacus quis, condimentum ipsum.In hac habitasse platea dictumst.
-
-                        Phasellus et neque fringilla, venenatis nulla eget, commodo felis.Etiam cursus, libero vitae maximus placerat, neque felis luctus purus, quis lobortis mauris mauris in libero.Duis id ante eget urna interdum laoreet at eget neque.Sed at aliquam dui.Donec nibh velit, commodo et fringilla eu, eleifend aliquet lorem.Pellentesque faucibus, dui quis mollis elementum, sem dui vehicula lectus, malesuada aliquam tortor risus id justo.Etiam sed tincidunt eros.Duis quis augue porta, tristique odio sed, lacinia mi.Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
-
-                        Nullam condimentum aliquet lectus eget faucibus.Cras congue gravida neque, ac ullamcorper odio dignissim at.Donec pulvinar fermentum nunc, at tincidunt eros elementum ultricies.In rutrum eget nunc et interdum.Quisque ultrices lorem mollis, pharetra turpis a, aliquet urna.In elementum viverra nulla et auctor.Donec rhoncus ut turpis eget vulputate.
-
-                        Sed dignissim quis velit nec lobortis.Phasellus id semper arcu.Integer ac ante tempus, accumsan nunc at, convallis nisl.Nunc consequat nisi mollis, dictum massa eu, convallis nunc.Donec pellentesque dictum commodo.Duis molestie, sapien id pharetra pharetra, velit lorem sodales magna, eget dictum lacus lorem sed lacus.Curabitur finibus dapibus elit, eget tristique turpis accumsan nec.In eu augue felis.Vestibulum pulvinar justo turpis.Donec pretium felis est.
-
-                        Ut leo nibh, ullamcorper eu ipsum a, commodo condimentum urna.Integer orci mi, imperdiet pellentesque velit ut, aliquam ornare sapien.Etiam in risus accumsan, lobortis lectus scelerisque, maximus nunc.Sed nunc magna, semper et urna ut, interdum tempor dolor.Aenean id nibh malesuada, posuere purus at, pellentesque sem.Nulla nec malesuada sapien.Phasellus accumsan nibh sed tincidunt tincidunt.Duis nec elit pellentesque, tincidunt nibh nec, tincidunt magna.Vivamus a leo pharetra, pretium tortor a, vulputate mi.Sed hendrerit tincidunt ante vel faucibus.Sed consequat risus non mollis tincidunt.</p>
+                        <div class="formList">
+                            ${formList}
+                        </div>
                     </div>
                 </div>
             </div>

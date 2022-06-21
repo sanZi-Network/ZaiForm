@@ -19,7 +19,7 @@ function createForm(req, res) {
     });
 
     // check body
-    const { action, title } = req.body;
+    const { action, title, description } = req.body;
     if (!title) return res.status(400).json({
         message: 'Missing title',
         status: 400
@@ -42,7 +42,7 @@ function createForm(req, res) {
             });
         
         case "score":
-            const scoreForm = createForm(title, "score", account.id);
+            const scoreForm = createForm(title, description, "score", account.id);
             if (!scoreForm) return res.status(400).json({
                 message: "The form already exists",
                 status: 400

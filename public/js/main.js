@@ -176,7 +176,7 @@ window.onload = async () => {
             }
         }, 100);
     }
-    
+
     loadPage(location.pathname);
     localStorage.getItem("theme") ? window.updateThemeMode(localStorage.getItem("theme")) : (window.matchMedia('(prefers-color-scheme: dark)').matches ? window.updateThemeMode("dark") : window.updateThemeMode("light"));
     document.querySelector(".theme-icon").addEventListener("click", () => {
@@ -191,7 +191,8 @@ window.onpopstate = (event) => {
 
 function inputStyle() {
     var inputs = document.getElementsByTagName("input");
-    Array.from(inputs).forEach(e => {
+    var textarea = document.getElementsByTagName("textarea");
+    Array.from([...inputs, ...textarea]).forEach(e => {
         if (e.value !== "") e.parentElement.classList.add("active");
         e.addEventListener("focusin", ev => {
             e.parentElement.classList.add("active");

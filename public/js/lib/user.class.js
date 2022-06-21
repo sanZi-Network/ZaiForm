@@ -43,7 +43,7 @@ class User {
         this.name = userInfo.name;
         this.email = userInfo.email;
         this.forms = userInfo.forms;
-        
+
         this._initlized = true;
 
         this.setContent();
@@ -57,6 +57,19 @@ class User {
             name: this.name,
             email: this.email
         };
+    }
+
+    async httpRequest(url, method, data) {
+        const res = await fetch(url, {
+            method: method,
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + this.#_AUTH_KEY
+            }
+        }).then(res => res.json());
+
+        return res;
     }
 }
 

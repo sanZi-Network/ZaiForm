@@ -219,14 +219,14 @@ label {
 }
 
 input {
-    width: calc(100% - 15px);
+    width: calc(100% - 30px);
     border: 0;
     line-height: 40px;
     border-bottom: 2px #707070 solid;
     color: var(--color-input-text);
     background-color: var(--color-input-bg);
     font-size: 20px;
-    padding: 0 0 2px 15px;
+    padding: 0 15px 2px 15px;
     margin: 15px 0;
 }
 
@@ -237,21 +237,50 @@ input:focus-visible,
     border-bottom: 2px var(--color-input-active) solid;
 }
 
+select:active,
+select:focus-visible,
+.active select {
+    outline: none;
+    border-bottom: 2px var(--color-input-active) solid;
+}
+
 select {
-    max-width: 100%;
     border: 0;
     line-height: 40px;
     border-bottom: 2px #707070 solid;
-    color: var(--color-input-text);
     background-color: var(--color-input-bg);
-    font-size: 20px;
     padding: 0 0 2px 15px;
     margin: 15px 0;
+    width: 100%;
+    font-size: 1.5rem;
+    color: var(--color-input-text);
 }
 
 select option {
     color: var(--color-input-text);
     background-color: var(--color-select-bg);
+}
+
+textarea {
+    width: calc(100% - 30px);
+    height: 150px;
+    resize: none;
+    border: 0;
+    border-bottom: 1px #fff solid;
+    color: var(--color-input-text);
+    background-color: var(--color-input-bg);
+    border-bottom: 2px #707070 solid;
+    font-size: 20px;
+    padding: 5px 15px 2px 15px;
+    margin-top: 30px;
+}
+
+textarea:active,
+textarea:focus-visible,
+.active textarea {
+    outline: none;
+    border: 2px var(--color-input-active) solid;
+    border-radius: 15px;
 }
 
 button {

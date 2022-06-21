@@ -1,8 +1,13 @@
 window.execute = async () => {
     // Login
+    const url = new URL(window.location.href);
 
     function loginSuccess() {
         window.userInfo = new User(localStorage.getItem("auth"));
+        if (url.searchParams.get("redirect")) {
+            goPage(url.searchParams.get("redirect"));
+            return;
+        }
         goPage("/dashboard");
     }
 

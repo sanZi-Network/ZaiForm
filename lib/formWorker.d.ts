@@ -50,7 +50,7 @@ export function readFormDB(): [
 ]
 
 // createForm
-export function createForm(title: string, action: "regular" | "score", userID: string): false | string;
+export function createForm(title: string, description: string, action: "regular" | "score", userID: string): false | string;
 
 // updateForm
 export function updateForm(formID: string, userID: string, data: {
