@@ -79,6 +79,9 @@ class User {
     }
 
     async httpRequest(url, method, data) {
+        if (!url || !method) return false;
+        if (!url.startsWith("/")) return false;
+
         return await fetch(url, {
             method: method,
             body: data ? JSON.stringify(data) : null,

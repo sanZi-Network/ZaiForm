@@ -11,7 +11,7 @@ window.execute = async () => {
         return;
     }
 
-    if (window.userInfo) {
+    if (window.userInfo && !window.userInfo._isFailedLogin) {
         goPage("/dashboard");
         return;
     }
@@ -135,7 +135,7 @@ window.execute = async () => {
                         <div id="logData">
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" id="username" name="username">
+                                <input type="text" id="username" name="username" autofocus>
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
@@ -158,6 +158,10 @@ window.execute = async () => {
             </div>
         </div>
     `);
+
+    document.querySelector("#username").addEventListener("keyup", (event) => {
+        event.target.value = event.target.value.replace(/[\W]/g, '');
+    });
 
     document.querySelector("#sanZiAuth").addEventListener("click", async (event) => {
         event.preventDefault();
@@ -210,7 +214,7 @@ window.execute = async () => {
     document.querySelector("#chLogMod").addEventListener("click", (event) => {
         event.preventDefault();
         var displayName = document.querySelector("#chLogMod").innerHTML === "Login" ? "Register" : "Login";
-        var btnDisplayName = document.querySelector("#chLogMod").innerHTML === "Login" ? "Login" : "Register";
+        var btnDisplayName = displayName === "Register" ? "Login" : "Register";
         if (!logPage) {
             logPage = document.querySelector("#logData").innerHTML;
             document.querySelector("#logData").innerHTML = `<div class="form-group">
@@ -226,7 +230,7 @@ window.execute = async () => {
                 <input type="password" id="password" name="password">
             </div>
             <div class="form-group">
-                <button type="submit">Login</button>
+                <button type="submit" id="logBtn">Login</button>
             </div>`;
             document.querySelector("#chLogMod").innerHTML = displayName;
             document.querySelector("#logBtn").innerHTML = btnDisplayName;

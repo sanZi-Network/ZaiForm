@@ -4,11 +4,6 @@ window.pageData.data = {};
 window.pageData.Interval = [];
 const page = [
     {
-        path: "/",
-        name: "Home",
-        id: "home",
-    },
-    {
         path: "/404",
         name: "404",
         id: "404",
@@ -37,6 +32,16 @@ const page = [
         path: "/dashboard",
         name: "Dashboard",
         id: "dashboard"
+    },
+    {
+        path: "/edit/",
+        name: "Edit",
+        id: "edit"
+    },
+    {
+        path: "/",
+        name: "Home",
+        id: "home",
     }
 ];
 
@@ -112,19 +117,55 @@ function createQuestionBox(title, description, question, callback, buttonDisplay
     var questionBox = createQuestionContent(title, description);
 
     var tskBox = document.querySelector("#tskBox");
-    var quest = "";
+    var quest = document.createElement("div");
     question.forEach((e, index) => {
         var thisID = questID + "-" + index;
         var type = "text";
         if (e.type) {
             type = e.type;
         }
-        quest += `<div>
-            <label for="${thisID}">${e.title}</label>
-            <input type="${type}" id="${thisID}" name="${thisID}" data-questID="${thisID}-${e.id}" ${e.value ? `value="${e.value}"` : ""} ${e.required ? "required" : ""}>
-        </div>`;
+        var div = document.createElement("div");
+
+        var label = document.createElement("label");
+        label.innerHTML = e.title;
+        label.setAttribute("for", thisID);
+
+        if (type !== "textarea") {
+            var input = document.createElement("input");
+            input.setAttribute("type", type);
+            input.setAttribute("id", thisID);
+            input.setAttribute("name", thisID);
+            input.setAttribute("data-questID", `${thisID}-${e.id}`);
+            input.setAttribute("value", e.value || "");
+            if (index === 0) input.setAttribute("autofocus", true);
+            if (e.required) input.setAttribute("required", "");
+            if (e.attr) {
+                for (var key in e.attr) {
+                    input.setAttribute(key, e.attr[key]);
+                }
+            }
+            if (e.onkeyup) input.addEventListener("keyup", e.onkeyup);
+        } else {
+            var input = document.createElement("textarea");
+            input.setAttribute("id", thisID);
+            input.setAttribute("name", thisID);
+            input.setAttribute("data-questID", `${thisID}-${e.id}`);
+            input.innerHTML = e.value || "";
+            if (index === 0) input.setAttribute("autofocus", true);
+            if (e.required) input.setAttribute("required", "");
+            if (e.attr) {
+                for (var key in e.attr) {
+                    input.setAttribute(key, e.attr[key]);
+                }
+            }
+            if (e.onkeyup) input.addEventListener("keyup", e.onkeyup);
+        }
+
+        div.appendChild(label);
+        div.appendChild(input);
+        quest.appendChild(div);
     });
-    tskBox.innerHTML = quest;
+    tskBox.appendChild(quest);
 
     var btn = document.createElement("button");
     btn.innerHTML = buttonDisplay || "Submit";
@@ -215,7 +256,7 @@ function loadPage(path, orgPath) {
     // if (path === orgPath) return;
     path = new URL("http://example.com" + path).pathname || location.pathname;
 
-    if (!page.find(e => e.path === location.pathname)) path = "/404";
+    if (!page.find(e => path.includes(e.path))) path = "/404";
 
     setContent("");
     setStyle("");
@@ -227,7 +268,7 @@ function loadPage(path, orgPath) {
     }
     window.pageData.Interval = [];
 
-    loadPageScript(page.find(e => e.path === path).id);
+    loadPageScript(page.find(e => path.includes(e.path)).id);
     toPageTop();
 }
 

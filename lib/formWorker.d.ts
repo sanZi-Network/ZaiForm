@@ -74,7 +74,7 @@ export function updateForm(formID: string, userID: string, data: {
         }
     ],
     enabled: boolean
-}): boolean;
+}): false | void;
 
 // readFormFields
 export function readFormFields(formI: string, userID: string): [

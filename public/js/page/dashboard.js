@@ -73,6 +73,9 @@ window.execute = async () => {
         a.btn#editPf {
             margin-top: 20px;
         }
+        a.btn i {
+            margin-right: 5px;
+        }
         .dashBoxList {
             display: flex;
             flex-wrap: wrap;
@@ -190,8 +193,8 @@ window.execute = async () => {
                             <h2>Fast Control</h2>
                         </div>
                         <div class="dashBoxBody">
-                            <a class="btn" href="/create">Create New Form</a>
-                            <a class="btn" href="/login?action=logout" style="background-color: #ff2e2e;">Logout</a>
+                            <a class="btn" href="/create"><i class="fa-solid fa-circle-plus"></i> Create New Form</a>
+                            <a class="btn" href="/login?action=logout" style="background-color: #ff2e2e;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
                         </div>
                     </div>
                     <div class="dashBox">
@@ -202,7 +205,7 @@ window.execute = async () => {
                             <h1 id="disName">${userName}</h1>
                             ${!userMailVerified ? `<p class="notVerify">Email not verified</p>` : ``}
                             <p style="font-size: .5rem; font-weight: 600;" >${userID}</p>
-                            <a class="btn" id="editPf">Edit Profile</a>
+                            <a class="btn" id="editPf"><i class="fa-solid fa-pen-to-square"></i> Edit Profile</a>
                         </div>
                     </div>
                 </div>
@@ -226,7 +229,10 @@ window.execute = async () => {
                 type: "text",
                 id: "name",
                 title: "Name",
-                value: userName
+                value: userName,
+                onkeyup: (event) => {
+                    event.target.value = event.target.value.replace(/[\W]/g, '');
+                }
             },
             {
                 type: "email",
@@ -297,6 +303,13 @@ window.execute = async () => {
 
                 alertBox("Form could not be deleted.", "error");
             });
+        });
+    });
+
+    document.querySelectorAll(".fmEdit").forEach(form => {
+        form.addEventListener("click", async () => {
+            var formID = form.parentElement.parentElement.getAttribute("data-formid");
+            goPage(`/edit/${formID}`);
         });
     });
 }
