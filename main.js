@@ -77,7 +77,10 @@ app.post("/api/createForm", (req, res) => api.createForm(req, res));
 
 // Method PUT
 app.put("/api/changeProfile", (req, res) => api.changeProfile(req, res));
-app.put("/api/editForm", (req, res) => api.viewForm(req, res));
+app.put("/api/editForm", (req, res) => api.editForm(req, res));
+
+// Method DELETE
+app.delete("/api/editForm", (req, res) => api.editForm(req, res));
 
 app.use(express.static(__dirname + "/public"));
 

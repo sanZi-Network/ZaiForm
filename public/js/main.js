@@ -84,6 +84,98 @@ function alertBox(message, type = "info") {
     }, 5000);
 }
 
+function createQuestionContent(title, description) {
+    var questionBox = document.querySelector("#questionBox");
+    if (!questionBox) {
+        var questionBox = document.createElement("div");
+        questionBox.classList.add("taskBox");
+        questionBox.id = "questionBox";
+        questionBox.innerHTML = `
+        <div class="tskbx">
+            <form id="tskLst">
+                <div class="taskBoxTitle">
+                    <h1>${title}</h1>
+                </div>
+                <p style="width: 100%;">${description}</p>
+                <div class="taskBoxContent" id="tskBox"></div>
+            </form>
+        </div>`;
+        document.body.appendChild(questionBox);
+    }
+
+    return questionBox;
+}
+
+function createQuestionBox(title, description, question, callback, buttonDisplay) {
+    var questID = Math.floor(Math.random() * 10000);
+
+    var questionBox = createQuestionContent(title, description);
+
+    var tskBox = document.querySelector("#tskBox");
+    var quest = "";
+    question.forEach((e, index) => {
+        var thisID = questID + "-" + index;
+        var type = "text";
+        if (e.type) {
+            type = e.type;
+        }
+        quest += `<div>
+            <label for="${thisID}">${e.title}</label>
+            <input type="${type}" id="${thisID}" name="${thisID}" data-questID="${thisID}-${e.id}" ${e.value ? `value="${e.value}"` : ""} ${e.required ? "required" : ""}>
+        </div>`;
+    });
+    tskBox.innerHTML = quest;
+
+    var btn = document.createElement("button");
+    btn.innerHTML = buttonDisplay || "Submit";
+    btn.setAttribute("type", "submit");
+    document.querySelector("#tskLst").appendChild(btn);
+
+    var btnCancel = document.createElement("button");
+    btnCancel.innerHTML = "Cancel";
+    btnCancel.setAttribute("type", "button");
+    btnCancel.style.backgroundColor = "#f44336";
+    document.querySelector("#tskLst").appendChild(btnCancel);
+    btnCancel.addEventListener("click", () => {
+        questionBox.remove();
+        callback(false);
+    });
+
+    questionBox.querySelector("#tskLst").addEventListener("submit", (event) => {
+        event.preventDefault();
+        var data = {};
+        question.forEach((e, index) => {
+            var thisID = questID + "-" + index;
+            data[e.id] = document.querySelector(`[data-questID="${thisID}-${e.id}"]`).value;
+        });
+        callback(data);
+        questionBox.remove();
+    });
+}
+
+function createConfirmBox(title, description, callback) {
+    var questionBox = createQuestionContent(title, description);
+
+    var btn = document.createElement("button");
+    btn.innerHTML = "Yes";
+    document.querySelector("#tskLst").appendChild(btn);
+    btn.addEventListener("click", (event) => {
+        questionBox.remove();
+        callback(true);
+    });
+
+    var btnCancel = document.createElement("button");
+    btnCancel.innerHTML = "No";
+    btnCancel.setAttribute("type", "button");
+    btnCancel.style.backgroundColor = "#f44336";
+    document.querySelector("#tskLst").appendChild(btnCancel);
+    btnCancel.addEventListener("click", () => {
+        questionBox.remove();
+        callback(false);
+    });
+}
+
+
 function toPageTop() {
     window.scrollTo(0, 0);
 }
@@ -165,6 +257,11 @@ document.addEventListener("click", event => {
 });
 
 window.onload = async () => {
+    localStorage.getItem("theme") ? window.updateThemeMode(localStorage.getItem("theme")) : (window.matchMedia('(prefers-color-scheme: dark)').matches ? window.updateThemeMode("dark") : window.updateThemeMode("light"));
+    document.querySelector(".theme-icon").addEventListener("click", () => {
+        toggleLocalStorageItem();
+    });
+
     await loadScript("/js/lib/user.class.js");
     if (localStorage.getItem("auth")) {
         window.userInfo = new User(localStorage.getItem("auth"));
@@ -178,10 +275,6 @@ window.onload = async () => {
     }
 
     loadPage(location.pathname);
-    localStorage.getItem("theme") ? window.updateThemeMode(localStorage.getItem("theme")) : (window.matchMedia('(prefers-color-scheme: dark)').matches ? window.updateThemeMode("dark") : window.updateThemeMode("light"));
-    document.querySelector(".theme-icon").addEventListener("click", () => {
-        toggleLocalStorageItem();
-    });
 }
 
 window.onpopstate = (event) => {

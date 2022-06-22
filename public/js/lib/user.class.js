@@ -6,6 +6,7 @@ class User {
         this.name = null;
         this.email = null;
         this.forms = null;
+        this.mailVerified = null;
 
         this._initlized = false;
         this.#_AUTH_KEY = authKey;
@@ -21,55 +22,79 @@ class User {
         // document.querySelector("#user-email").innerHTML = this.email;
     }
 
+    setContentToLogin() {
+        const headerAcc = document.querySelector("#acc");
+        headerAcc.innerHTML = `Login / Sign Up`;
+        headerAcc.href = `/login`;
+    }
+
     async init() {
-        if (this._initlized) return;
+        return new Promise(async (resolve, reject) => {
+            const userInfo = await this.httpRequest(`/api/getUserInfo`, "GET").then(res => {
+                if (res.status !== 200) return null;
+                return res.data.data;
+            });
 
-        const userInfo = await fetch(`/api/getUserInfo`, {
-            method: 'GET',
-            headers: {
-                'Authorization': "Bearer " + this.#_AUTH_KEY
-            }
-        }).then(res => res.json()).then(res => {
-            if (res.status !== 200) return null;
-            return res.data;
+            if (!userInfo) {
+                this._isFailedLogin = true;
+                this.setContentToLogin();
+                return reject();
+            };
+
+            this.id = userInfo.id;
+            this.name = userInfo.name;
+            this.email = userInfo.email;
+            this.forms = userInfo.forms;
+            this.mailVerified = userInfo.mailVerified;
+
+            this._initlized = true;
+
+            this.setContent();
+
+            return resolve(this);
         });
+    }
 
-        if (!userInfo) {
-            this._isFailedLogin = true;
-            return;
-        };
+    logout() {
+        this.#_AUTH_KEY = null;
+        localStorage.removeItem("auth");
+        
+        this.id = null;
+        this.name = null;
+        this.email = null;
+        this.forms = null;
+        this.mailVerified = null;
 
-        this.id = userInfo.id;
-        this.name = userInfo.name;
-        this.email = userInfo.email;
-        this.forms = userInfo.forms;
-
-        this._initlized = true;
-
-        this.setContent();
-
-        return this;
+        return this.setContentToLogin();
     }
 
     get getUserInfo() {
+        if (!this._initlized) return null;
         return {
             id: this.id,
             name: this.name,
-            email: this.email
+            email: this.email,
+            forms: this.forms
         };
     }
 
     async httpRequest(url, method, data) {
-        const res = await fetch(url, {
+        return await fetch(url, {
             method: method,
-            body: JSON.stringify(data),
+            body: data ? JSON.stringify(data) : null,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + this.#_AUTH_KEY
             }
-        }).then(res => res.json());
-
-        return res;
+        }).then(async res => {
+            if (res.status === 204) return {
+                status: res.status
+            };
+            return {
+                status: res.status,
+                data: await res.json()
+            };
+        });
     }
 }
 

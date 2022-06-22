@@ -1,5 +1,5 @@
 function editForm(req, res) {
-    const { verifyAccount, parserAuthorizationHeader, updateForm, updateFormField } = require('../lib/lib');
+    const { verifyAccount, parserAuthorizationHeader, updateForm, updateFormField, deleteForm } = require('../lib/lib');
     // check auth
     if (!req.headers.authorization) return res.status(401).json({
         message: 'Missing authorization header',
@@ -17,6 +17,23 @@ function editForm(req, res) {
         message: 'Invalid authorization header',
         status: 401
     });
+
+    // check method
+    if (req.method === "DELETE") {
+        const { id } = req.body;
+        if (!id) return res.status(400).json({
+            message: 'Missing id',
+            status: 400
+        });
+
+        var ret = deleteForm(id, account.id);
+        if (ret === false) return res.status(400).json({
+            message: 'Invalid id',
+            status: 400
+        });
+
+        return res.status(204).end();
+    }
 
     // check body
     const { id, title, fields } = req.body;

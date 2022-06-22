@@ -15,6 +15,7 @@
     --color-button-hover-bg: #0072b4;
     --color-button-disabled-bg: #707070;
     --color-button-disabled-text: #fff;
+    --color-button-blur-bg: #00000026;
     --color-input-border: #707070;
     --color-input-bg: unset;
     --color-input-text: #000;
@@ -23,7 +24,7 @@
     --color-label: #727272;
     --color-task-status-bg: #0b7ec0;
     --color-task-status-bar: #707070;
-    --color-card-bg: #2a2a2a;
+    --color-card-bg: #484848;
     --color-card-text: #fff;
     --color-card-a: #2d76d6;
 

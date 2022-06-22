@@ -2,6 +2,22 @@ window.execute = async () => {
     // Login
     const url = new URL(window.location.href);
 
+    if (url.searchParams.get("action") === "logout") {
+        if (window.userInfo) {
+            await window.userInfo.logout();
+            window.userInfo = null;
+        }
+        goPage("/login");
+        return;
+    }
+
+    if (window.userInfo) {
+        goPage("/dashboard");
+        return;
+    }
+
+    var logPage = "";
+
     function loginSuccess() {
         window.userInfo = new User(localStorage.getItem("auth"));
         if (url.searchParams.get("redirect")) {
@@ -116,19 +132,21 @@ window.execute = async () => {
                 </div>
                 <div class="login-body">
                     <form action="#" method="post" id="lgb">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" id="username" name="username">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" id="password" name="password">
-                        </div>
-                        <div class="form-group">
-                            <button type="submit">Login</button>
+                        <div id="logData">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" name="username">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" id="logBtn">Login</button>
+                            </div>
                         </div>
                         <div class="extra">
-                            <span><a>Register</a></span>
+                            <span><a id="chLogMod">Register</a></span>
                             <span><a href="/forgetPassword">Forgot Password</a></span>
                         </div>
                     </form>
@@ -157,10 +175,16 @@ window.execute = async () => {
     document.querySelector("#lgb").addEventListener("submit", async (event) => {
         event.preventDefault();
         var form = event.target;
+        var emailInput = form.querySelector("#email");
+        var loginType = "login";
+
+        if (emailInput) loginType = "register";
+        
         var data = {
             username: form.username.value,
+            email: emailInput ? emailInput.value : null,
             password: form.password.value,
-            action: "login"
+            action: loginType
         };
         var res = await fetch("/api/sysAuth", {
             method: "POST",
@@ -173,7 +197,7 @@ window.execute = async () => {
             alertBox("Error: " + err.message, "error");
         });
 
-        if (res.status !== 200) {
+        if (res.status > 300) {
             alertBox("Error: " + res.message, "error");
             return;
         }
@@ -181,5 +205,38 @@ window.execute = async () => {
         alertBox("Successfully logged in", "success");
         localStorage.setItem("auth", res.data.token);
         loginSuccess();
+    });
+
+    document.querySelector("#chLogMod").addEventListener("click", (event) => {
+        event.preventDefault();
+        var displayName = document.querySelector("#chLogMod").innerHTML === "Login" ? "Register" : "Login";
+        var btnDisplayName = document.querySelector("#chLogMod").innerHTML === "Login" ? "Login" : "Register";
+        if (!logPage) {
+            logPage = document.querySelector("#logData").innerHTML;
+            document.querySelector("#logData").innerHTML = `<div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <div class="form-group">
+                <button type="submit">Login</button>
+            </div>`;
+            document.querySelector("#chLogMod").innerHTML = displayName;
+            document.querySelector("#logBtn").innerHTML = btnDisplayName;
+
+            return;
+        }
+        var anthpage = logPage;
+        logPage = document.querySelector("#logData").innerHTML;
+        document.querySelector("#logData").innerHTML = anthpage;
+        document.querySelector("#chLogMod").innerHTML = displayName;
+        document.querySelector("#logBtn").innerHTML = btnDisplayName;
     });
 }

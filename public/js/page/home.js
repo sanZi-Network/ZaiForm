@@ -23,6 +23,19 @@ window.execute = async () => {
             padding: 0.5rem 1rem;
             margin-top: 1rem;
             text-decoration: none;
+            border: 3px #005fd4 solid;
+            margin-right: 5px;
+        }
+        .home > .intro a:hover {
+            background: #3e67ff;
+            border: 3px #3e67ff solid;
+        }
+        .home > .intro a.special {
+            background-color: unset;
+            color: var(--color-font);
+        }
+        .home > .intro a.special:hover {
+            background-color: var(--color-button-blur-bg);
         }
         .home .features {
             margin-top: 100px;
@@ -65,7 +78,8 @@ window.execute = async () => {
             <div class="intro">
                 <h1>The <font style="color: #42a5f5;">Easy</font> Way To Create <font style="color: #f5c642;">Forms</font>!</h1>
                 <p>Tired of making <font style="color: #42a5f5;">awesome</font> forms with <font style="color: #ff382c;">Bad Form App</font>? Try ZaiForm, this form program will give you the <font style="color: #42a5f5;">best experience</font>.</p>
-                <a href="/">Get Started</a>
+                <a href="/create">Get Started</a>
+                ${window.userInfo ? `<a href="/dashboard" class="special">Manage Your Forms</a>` : ""}
             </div>
             <div class="features">
                 <div class="feature">

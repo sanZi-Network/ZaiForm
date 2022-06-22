@@ -27,7 +27,7 @@ function createForm(req, res) {
 
     switch (action) {
         case "regular":
-            const form = createForm(title, "regular", account.id);
+            const form = createForm(title, description, "regular", account.id);
             if (!form) return res.status(400).json({
                 message: "The form already exists",
                 status: 400

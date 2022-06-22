@@ -1,4 +1,7 @@
 window.execute = async () => {
+    var tempData = localStorage.getItem("createTemp");
+    if (tempData !== null) tempData = JSON.parse(tempData);
+
     setStyle(`
         .page {
             margin: 0 auto;
@@ -67,16 +70,16 @@ window.execute = async () => {
                     <form action="#" method="post" id="lgb">
                         <div class="form-group">
                             <label for="title">Title</label>
-                            <input type="text" id="title" name="title">
+                            <input type="text" id="title" name="title" ${tempData ? `value="${tempData.title}"` : ""}>
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea type="text" id="description" name="description"></textarea>
+                            <textarea type="text" id="description" name="description">${tempData ? tempData.description : ""}</textarea>
                         </div>
                         <div class="form-group">
                             <select id="type" name="type">
-                                <option value="regular">Regular Form</option>
-                                <option value="score">Score Form</option>
+                                <option value="regular" ${tempData ? tempData.type === "regular" ? "selected" : "" : ""}>Regular Form</option>
+                                <option value="score" ${tempData ? tempData.type === "score" ? "selected" : "" : ""}>Score Form</option>
                             </select>
                         <div class="form-group">
                             <button type="submit" id="sbb">Create</button>
@@ -91,7 +94,16 @@ window.execute = async () => {
         event.preventDefault();
 
         if (!("userInfo" in window)) {
-            alert("Try ZaiForm with a valid account.");
+            createConfirmBox("Create an Account", "Create a ZaiForm account to start your ZaiForm journey.", (choise) => {
+                if (choise) {
+                    localStorage.setItem("createTemp", JSON.stringify({
+                        title: document.querySelector("#title").value,
+                        description: document.querySelector("#description").value,
+                        type: document.querySelector("#type").value
+                    }));
+                    goPage("/login?redirect=/create");
+                }
+            });
             return;
         }
 
@@ -99,6 +111,8 @@ window.execute = async () => {
 
         form.sbb.disabled = true;
         form.sbb.innerHTML = "Sending...";
+
+        localStorage.removeItem("createTemp");
 
         var data = {
             action: form.type.value,
@@ -117,7 +131,11 @@ window.execute = async () => {
             return;
         }
 
-        alertBox("Success: " + res.message, "success");
+        alertBox("Success created form", "success");
         form.sbb.innerHTML = "Sent";
+
+        window.userInfo.init();
+
+        goPage("/edit/" + res.data.data.id);
     });
 }

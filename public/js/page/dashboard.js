@@ -1,11 +1,12 @@
 window.execute = async () => {
-    if (!window.userInfo) {
+    if (!window.userInfo || window.userInfo._isFailedLogin) {
         goPage("/login?redirect=" + location.pathname);
         return;
     };
 
     const userName = window.userInfo.name;
     const userEmail = window.userInfo.email;
+    const userMailVerified = window.userInfo.mailVerified;
     const userID = window.userInfo.id;
     const forms = window.userInfo.forms;
 
@@ -17,14 +18,14 @@ window.execute = async () => {
     var formList = "";
 
     if (forms.length === 0) {
-        formList = "<div class='formList'>You have no forms.</div>";
+        formList = "<div class='formList' style='text-align: center;font-size: 3rem;font-weight: 600;'>You have no forms.</div>";
     } else {
         formList = "<div class='formList'>";
         forms.forEach(e => {
             formList += `
-                <div class="formBox">
+                <div class="formBox" data-formid="${e.id}">
                     <div class="formHeader">
-                        <h1>${e.title}</h1>
+                        <h1 class="formName" title="${e.title}">${e.title}</h1>
                         <div class="formTimeInfo">
                             <h3>Created:</h3>
                             <p>${timestampFormat(e.createAt)}</p>
@@ -33,10 +34,10 @@ window.execute = async () => {
                     </div>
                     <div style="flex: 1;"></div>
                     <div class="buttons">
-                        <a data-extra="Open"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        <a data-extra="Edit"><i class="fas fa-edit"></i></a>
-                        <a data-extra="Analyze"><i class="fas fa-chart-line"></i></a>
-                        <a data-extra="Delete"><i class="fas fa-trash-alt"></i></a>
+                        <a data-extra="Open" class="fmOpen"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <a data-extra="Edit" class="fmEdit"><i class="fas fa-edit"></i></a>
+                        <a data-extra="Analyze" class="fmAnalyze"><i class="fas fa-chart-line"></i></a>
+                        <a data-extra="Delete" class="fmDelete"><i class="fas fa-trash-alt"></i></a>
                     </div>
                 </div>
             `;
@@ -67,6 +68,9 @@ window.execute = async () => {
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-top: 10px;
+        }
+        a.btn#editPf {
             margin-top: 20px;
         }
         .dashBoxList {
@@ -74,9 +78,6 @@ window.execute = async () => {
             flex-wrap: wrap;
             justify-content: center;
             margin-top: 50px;
-        }
-        .dashBoxList div {
-            flex: 1 1 auto;
         }
         .dashBox {
             padding: 20px;
@@ -99,23 +100,27 @@ window.execute = async () => {
         .dashBox .dashBoxBody h2,
         .dashBox .dashBoxBody p,
         .dashBox .dashBoxBody div {
-            color: var(--color-card-text) !important;
+            color: var(--color-card-text);
+        }
+        p.notVerify {
+            color: #ff7600 !important;
+            font-size: 1rem;
+            font-weight: 600;
         }
         .formBox {
             display: flex;
-            align-items: center;
             flex-wrap: wrap;
             margin-bottom: 1.5rem;
             background-color: #000;
             border-radius: 15px;
             padding: 20px;
             position: relative;
+            flex-direction: column;
         }
         .formBox .buttons {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            justify-content: flex-end;
         }
         .formBox:hover {
             background-color: #3e67ff;
@@ -179,13 +184,14 @@ window.execute = async () => {
                 <h1>ZaiForm Dashboard</h1>
             </div>
             <div class="dashBoxList" style="width: 100%;">
-                <div>
+                <div style="flex: 1;">
                     <div class="dashBox">
                         <div class="dashBoxHeader">
-                            <h2>Fast Options</h2>
+                            <h2>Fast Control</h2>
                         </div>
                         <div class="dashBoxBody">
                             <a class="btn" href="/create">Create New Form</a>
+                            <a class="btn" href="/login?action=logout" style="background-color: #ff2e2e;">Logout</a>
                         </div>
                     </div>
                     <div class="dashBox">
@@ -193,13 +199,14 @@ window.execute = async () => {
                             <h2>Profile</h2>
                         </div>
                         <div class="dashBoxBody">
-                            <h1>${userName}</h1>
-                            <p style="font-size: .5rem; font-weight: 600;">${userID}</p>
-                            <a class="btn">Edit Profile</a>
+                            <h1 id="disName">${userName}</h1>
+                            ${!userMailVerified ? `<p class="notVerify">Email not verified</p>` : ``}
+                            <p style="font-size: .5rem; font-weight: 600;" >${userID}</p>
+                            <a class="btn" id="editPf">Edit Profile</a>
                         </div>
                     </div>
                 </div>
-                <div class="dashBox" style="flex: 10 1 auto;width: 60%;">
+                <div class="dashBox" style="flex: 10 1 auto;width: 0;">
                     <div class="dashBoxHeader">
                         <h2>Your Forms</h2>
                     </div>
@@ -212,4 +219,84 @@ window.execute = async () => {
             </div>
         </div>
     `);
+
+    document.getElementById("editPf").addEventListener("click", () => {
+        createQuestionBox("Edit Profile", "Update your ZaiForm profile.", [
+            {
+                type: "text",
+                id: "name",
+                title: "Name",
+                value: userName
+            },
+            {
+                type: "email",
+                id: "email",
+                title: "Email",
+                value: userEmail
+            },
+            {
+                type: "password",
+                id: "password",
+                title: "Password"
+            }
+        ], async (data) => {
+            if (!data) return;
+
+            var request = await window.userInfo.httpRequest("/api/changeProfile", "PUT", {
+                name: data.name,
+                email: data.email,
+                password: data.password
+            });
+
+            if (request.status === 204) {
+                alertBox("Profile Updated Successfully", "success");
+            
+                try {
+                    await window.userInfo.init();
+                    goPage("/dashboard");
+                } catch (e) {
+                    goPage("/login");
+                }
+            }
+        }, "Save");
+    });
+
+    document.querySelectorAll(".fmDelete").forEach(form => {
+        form.addEventListener("click", async () => {
+            var formName = form.parentElement.parentElement.querySelector(".formName").innerText;
+            var formID = form.parentElement.parentElement.getAttribute("data-formid");
+
+            createQuestionBox("Delete Form", `Are you sure you want to delete <font style="color: red;">${formName}</font>? Please type the form name to confirm.`, [
+                {
+                    type: "text",
+                    id: "name",
+                    title: "Form Name"
+                }
+            ], async (data) => {
+                if (!data) {
+                    return;
+                }
+
+                if (data.name !== formName) {
+                    alertBox("Form name does not match.", "error");
+                    return;
+                }
+
+                var request = await window.userInfo.httpRequest("/api/editForm", "DELETE", {
+                    id: formID
+                });
+
+                if (request.status === 204) {
+                    alertBox("Form Deleted Successfully", "success");
+
+                    await window.userInfo.init();
+
+                    goPage("/dashboard");
+                    return;
+                }
+
+                alertBox("Form could not be deleted.", "error");
+            });
+        });
+    });
 }

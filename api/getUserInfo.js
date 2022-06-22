@@ -31,7 +31,8 @@ function getUserInfo(req, res) {
             id: account.id,
             name: accountFile.name,
             email: accountFile.email,
-            forms: getForms(account.id)
+            forms: getForms(account.id),
+            mailVerified: accountFile.mailVerified.status
         }
     });
 }
