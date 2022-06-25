@@ -244,12 +244,15 @@ async function loadScript(url) {
 }
 
 function loadPageScript(id) {
-    if (page.find(e => e.id === id) === undefined) return;
-    window.execute = () => { };
-    fetch(`/js/page/${id}.js`).then(res => res.text()).then(res => {
-        eval(res);
-        window.execute();
-    })
+    return new Promise((resolve, reject) => {
+        if (page.find(e => e.id === id) === undefined) return resolve(false);
+        window.execute = () => { };
+        fetch(`/js/page/${id}.js`).then(res => res.text()).then(res => {
+            eval(res);
+            window.execute();
+            resolve();
+        })
+    });
 };
 
 function loadPage(path, orgPath) {
@@ -257,6 +260,7 @@ function loadPage(path, orgPath) {
     path = new URL("http://example.com" + path).pathname || location.pathname;
 
     if (!page.find(e => path.includes(e.path))) path = "/404";
+    if (page.find(e => path.includes(e.path)).path === "/" && path !== "/") path = "/404";
 
     setContent("");
     setStyle("");
@@ -268,8 +272,11 @@ function loadPage(path, orgPath) {
     }
     window.pageData.Interval = [];
 
-    loadPageScript(page.find(e => path.includes(e.path)).id);
-    toPageTop();
+    return new Promise(async (resolve, reject) => {
+        await loadPageScript(page.find(e => path.includes(e.path)).id);
+        toPageTop();
+        resolve();
+    });
 }
 
 function goPage(path) {
@@ -315,7 +322,8 @@ window.onload = async () => {
         }, 100);
     }
 
-    loadPage(location.pathname);
+    await loadPage(location.pathname);
+    dropdownStyle();
 }
 
 window.onpopstate = (event) => {
@@ -335,6 +343,25 @@ function inputStyle() {
         e.addEventListener("focusout", ev => {
             if (e.value === "") {
                 e.parentElement.classList.remove("active");
+            }
+        });
+    });
+}
+
+function dropdownStyle() {
+    var dropdown = document.querySelectorAll(".dashBox");
+    Array.from(dropdown).forEach(e => {
+        var header = e.querySelector(".dashBoxHeader");
+        var body = e.querySelector(".dashBoxBody");
+
+        header.addEventListener("click", () => {
+            console.log("click");
+            if (!header.classList.contains("open")) {
+                header.classList.add("open");
+                body.classList.add("open");
+            } else {
+                header.classList.remove("open");
+                body.classList.remove("open");
             }
         });
     });
@@ -364,6 +391,7 @@ function hideMenu() {
 
 document.addEventListener("DOMNodeInserted", (ev) => {
     inputStyle();
+    dropdownStyle();
 }, false);
 
 function toggleLocalStorageItem() {

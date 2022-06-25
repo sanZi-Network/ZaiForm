@@ -58,128 +58,6 @@ window.execute = async () => {
             margin-top: 50px;
             width: 80%;
         }
-        a.btn {
-            color: #fff;
-            background: #3e67ff;
-            border-radius: 5px;
-            padding: 0.5rem 1rem;
-            display: block;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
-        a.btn#editPf {
-            margin-top: 20px;
-        }
-        a.btn i {
-            margin-right: 5px;
-        }
-        .dashBoxList {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 50px;
-        }
-        .dashBox {
-            padding: 20px;
-            margin: 10px;
-            background-color: var(--color-card-bg);
-            border-radius: 15px;
-            min-width: 300px;
-            color: var(--color-card-text) !important;
-        }
-        .dashBox .dashBoxHeader {
-            margin-bottom: 15px;
-            color: var(--color-card-text);
-        }
-        .dashBox .dashBoxBody h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--color-card-text);
-        }
-        .dashBox .dashBoxHeader h2,
-        .dashBox .dashBoxBody h2,
-        .dashBox .dashBoxBody p,
-        .dashBox .dashBoxBody div {
-            color: var(--color-card-text);
-        }
-        p.notVerify {
-            color: #ff7600 !important;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-        .formBox {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-            background-color: #000;
-            border-radius: 15px;
-            padding: 20px;
-            position: relative;
-            flex-direction: column;
-        }
-        .formBox .buttons {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .formBox:hover {
-            background-color: #3e67ff;
-            box-shadow: 0px 5px 10px 3px #000;
-        }
-        .formBox .formHeader {
-            max-width: 100%;
-        }
-        .formBox .formHeader h1 {
-            margin-left: 15px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-        .formBox .formHeader .formTimeInfo h3 {
-            margin-left: 10px;
-            margin-top: 5px;
-            color: var(--color-card-text);
-        }
-        .formBox .formHeader .formTimeInfo p {
-            margin-left: 30px;
-            margin-top: 5px;
-        }
-        .formBox .formHeader span {
-            font-size: .5rem;
-            color: #ffffff40;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            margin-left: 5px;
-            font-family: monospace;
-        }
-        .formBox .formHeader .formID {
-            position: absolute;
-            bottom: 0;
-        }
-        .formBox a i {
-            font-size: 2rem;
-            padding: 15px;
-            color: var(--color-card-text);
-        }
-        .formBox a {
-            border-radius: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 60px;
-            height: 60px;
-            margin-right: 5px;
-        }
-        .formBox a:hover {
-            background: #0031b9;
-        }
-        .formBox a:active {
-            background: #0031b9;
-        }
     `);
     setContent(`
         <div class="home">
@@ -210,13 +88,11 @@ window.execute = async () => {
                     </div>
                 </div>
                 <div class="dashBox" style="flex: 10 1 auto;width: 0;">
-                    <div class="dashBoxHeader">
+                    <div class="dashBoxHeader open">
                         <h2>Your Forms</h2>
                     </div>
-                    <div class="dashBoxBody">
-                        <div class="formList">
-                            ${formList}
-                        </div>
+                    <div class="dashBoxBody open">
+                        ${formList}
                     </div>
                 </div>
             </div>

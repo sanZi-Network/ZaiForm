@@ -36,13 +36,13 @@ function editForm(req, res) {
     }
 
     // check body
-    const { id, title, description, fields } = req.body;
+    const { id, title, description, fields, customize } = req.body;
     if (!id) return res.status(400).json({
         message: 'Missing id',
         status: 400
     });
 
-    if (!title && !fields && !description) return res.status(400).json({
+    if (!title && !fields && !description && !customize) return res.status(400).json({
         message: 'Missing title, description or fields',
         status: 400
     });
@@ -50,7 +50,8 @@ function editForm(req, res) {
     if (title) {
         var h = updateForm(id, account.id, {
             title,
-            description: description === "" ? undefined : description
+            description: description === "" ? undefined : description,
+            customize: customize === "" ? undefined : customize
         });
         if (h === false) return res.status(400).json({
             message: 'Invalid id',

@@ -14,6 +14,10 @@ window.execute = async () => {
             font-weight: 600;
             margin-bottom: 1.5em;
         }
+        .home > .intro .buttons {
+            display: flex;
+            flex-wrap: wrap;
+        }
         .home > .intro a {
             font-size: 1.5rem;
             font-weight: 600;
@@ -78,8 +82,10 @@ window.execute = async () => {
             <div class="intro">
                 <h1>The <font style="color: #42a5f5;">Easy</font> Way To Create <font style="color: #f5c642;">Forms</font>!</h1>
                 <p>Tired of making <font style="color: #42a5f5;">awesome</font> forms with <font style="color: #ff382c;">Bad Form App</font>? Try ZaiForm, this form program will give you the <font style="color: #42a5f5;">best experience</font>.</p>
-                <a href="/create">Get Started</a>
-                ${window.userInfo ? `<a href="/dashboard" class="special">Manage Your Forms</a>` : ""}
+                <div class="buttons">
+                    <a href="/create">Get Started</a>
+                    ${window.userInfo ? `<a href="/dashboard" class="special">Manage Your Forms</a>` : ""}
+                </div>
             </div>
             <div class="features">
                 <div class="feature">

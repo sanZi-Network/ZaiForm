@@ -20,7 +20,13 @@ export function readFormFile(formID: string, userID: string): false | {
                 }
             ],
             value: null | string,
-            correctID?: string
+            correctID?: string,
+            customize?: {
+                customCSS?: string,
+                customBackground?: string,
+                customBorder?: string,
+                customFont?: string
+            }
         }
     ],
     userChoice: [
@@ -36,7 +42,13 @@ export function readFormFile(formID: string, userID: string): false | {
     ],
     createTimestamp: number,
     updateTimestamp: number,
-    enabled: boolean
+    enabled: boolean,
+    customize?: {
+        customCSS?: string,
+        customBackground?: string,
+        customBorder?: string,
+        customFont?: string
+    }
 }
 
 // readFormDB
@@ -70,10 +82,22 @@ export function updateForm(formID: string, userID: string, data: {
                 }
             ],
             value: null | string,
-            correctID?: string
+            correctID?: string,
+            customize?: {
+                customCSS?: string,
+                customBackground?: string,
+                customBorder?: string,
+                customFont?: string
+            }
         }
     ],
-    enabled: boolean
+    enabled: boolean,
+    customize?: {
+        customCSS?: string,
+        customBackground?: string,
+        customBorder?: string,
+        customFont?: string
+    }
 }): false | void;
 
 // readFormFields
@@ -91,7 +115,13 @@ export function readFormFields(formI: string, userID: string): [
             }
         ],
         value: null | string,
-        correctID?: string
+        correctID?: string,
+        customize?: {
+            customCSS?: string,
+            customBackground?: string,
+            customBorder?: string,
+            customFont?: string
+        }
     }
 ];
 
