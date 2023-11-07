@@ -1,4 +1,8 @@
 # ZaiForm
+
+> **Warning**
+> ZaiForm Project is no longer being maintained. This repository will be archived.
+
 This is a form system, which is a simple way to create the form system by your own.
 
 ## Install
